@@ -87,7 +87,7 @@ CREATE TABLE ecommerce_table.ProductTags (
 	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
 );
 
--- Create Promotions tabe
+-- Create Promotions table
 CREATE TABLE ecommerce_table.Promotions (
 	PromotionID SERIAL PRIMARY KEY,
 	PromotionName VARCHAR(100) NOT NULL,
@@ -95,4 +95,158 @@ CREATE TABLE ecommerce_table.Promotions (
 	DiscountValue DECIMAL(10, 2) NOT NULL,
 	StartDate DATE NOT NULL,
 	EndDate DATE NOT NULL
+);
+
+-- Create Coupons table
+CREATE TABLE ecommerce_table.Coupons (
+	CouponID SERIAL PRIMARY KEY,
+	Code VARCHAR(50) NOT NULL UNIQUE,
+	DiscountType VARCHAR(50) NOT NULL,
+	DiscountValue DECIMAL(10, 2) NOT NULL,
+	ExpiryDate DATE NOT NULL,
+	UsageLimit INT NOT NULL
+);
+
+-- Create ShippingMethods table
+CREATE TABLE ecommerce_table.ShippingMethods (
+	ShippingMethodID SERIAL PRIMARY KEY,
+	MethodName VARCHAR(100) NOT NULL,
+	Cost DECIMAL(10, 2) NOT NULL,
+	DeliveryTime VARCHAR(50) NOT NULL
+);
+
+-- Create Inventory table
+CREATE TABLE ecommerce_table.Inventory (
+	InventoryID SERIAL PRIMARY KEY,
+	ProductID INT NOT NULL,
+	WarehouseLocation VARCHAR(100) NOT NULL,
+	Quantity INT NOT NULL,
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+);
+
+CREATE TABLE ecommerce_table.ProductAvailability (
+	AvailabilityID SERIAL PRIMARY KEY,
+	ProductID INT NOT NULL,
+	IsAvailable BOOLEAN NOT NULL,
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+);
+
+-- Create ProductReviews table
+CREATE TABLE ecommerce_table.ProductReviews (
+	ReviewID SERIAL PRIMARY KEY,
+	ProductID INT NOT NULL,
+	UserID INT NOT NULL,
+	Rating INT CHECK (RATING >= 1 AND RATING <= 5),
+	ReviewText TEXT,
+	ReviewDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID)
+);
+
+-- Create Orders table
+CREATE TABLE ecommerce_table.Orders (
+	OrderID SERIAL PRIMARY KEY,
+	UserID INT NOT NULL,
+	OrderDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	ShippingAddressID INT NOT NULL,
+	BillingAddressID INT NOT NULL,
+	TotalAmount DECIMAL(10, 2) NOT NULL,
+	OrderStatus VARCHAR(50) NOT NULL,
+	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
+	FOREIGN KEY (ShippingAddressID) REFERENCES ecommerce_table.Addresses(AddressID),
+	FOREIGN KEY (BillingAddressID) REFERENCES ecommerce_table.Addresses(AddressID)
+);
+
+-- Create SupportTickets table
+CREATE TABLE ecommerce_table.SupportTickets (
+	TicketID SERIAL PRIMARY KEY,
+	UserID INT NOT NULL,
+	OrderID INT,
+	Subject VARCHAR(255) NOT NULL,
+	Status VARCHAR(50) NOT NULL,
+	CreatedDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID)
+);
+
+-- Create TicketMessages table
+CREATE TABLE ecommerce_table.TicketMessages (
+	MessageID SERIAL PRIMARY KEY,
+	TicketID INT NOT NULL,
+	SenderID INT NOT NULL,
+	MessageText TEXT NOT NULL,
+	Timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (TicketID) REFERENCES ecommerce_table.SupportTickets(TicketID),
+	FOREIGN KEY (SenderID) REFERENCES ecommerce_table.Users(UserID)
+);
+
+-- Create OrderDetails table
+CREATE TABLE ecommerce_table.OrderDetails (
+	OrderDetailID SERIAL PRIMARY KEY,
+	OrderID INT NOT NULL,
+	ProductID INT NOT NULL,
+	Quantity INT NOT NULL,
+	Price DECIMAL(10, 2) NOT NULL,
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+);
+
+-- Create OrdersPromotions table
+CREATE TABLE ecommerce_table.OrdersPromotions (
+	OrderPromotionID SERIAL PRIMARY KEY,
+	OrderID INT NOT NULL,
+	PromotionID INT NOT NULL,
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
+	FOREIGN KEY (PromotionID) REFERENCES ecommerce_table.Promotions(PromotionID)
+);
+
+-- Create Payments table
+CREATE TABLE ecommerce_table.Payments (
+	PaymentID SERIAL PRIMARY KEY,
+	OrderID INT NOT NULL,
+	PaymentMethod VARCHAR(50) NOT NULL,
+	Amount DECIMAL(10, 2) NOT NULL,
+	PaymentDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PaymentStatus VARCHAR(50) NOT NULL,
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID)
+);
+
+-- Create Wishlist table
+CREATE TABLE ecommerce_table.Wishlist (
+	WishlistID SERIAL PRIMARY KEY,
+	UserID INT NOT NULL,
+	ProductID INT NOT NULL,
+	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+);
+
+-- Create Shipments table
+CREATE TABLE ecommerce_table.Shipments (
+	ShipmentID SERIAL PRIMARY KEY,
+	OrderID INT NOT NULL,
+	ShippingMethodID INT NOT NULL,
+	TrackingNumber VARCHAR(100) NOT NULL,
+	ShipmentDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	DeliveryDate TIMESTAMP,
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
+	FOREIGN KEY (ShippingMethodID) REFERENCES ecommerce_table.ShippingMethods(ShippingMethodID)
+);
+
+-- Create ShipmentUpdates table
+CREATE TABLE ecommerce_table.ShipmentUpdates (
+	UpdateID SERIAL PRIMARY KEY,
+	ShipmentID INT NOT NULL,
+	StatusUpdate VARCHAR(255) NOT NULL,
+	Timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (ShipmentID) REFERENCES ecommerce_table.Shipments(ShipmentID)
+);
+
+-- Create AuditLogs table
+CREATE TABLE ecommerce_table.AuditLogs (
+	LogID SERIAL PRIMARY KEY,
+	UserID INT NOT NULL,
+	Action VARCHAR(255) NOT NULL,
+	Timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	Details TEXT,
+	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID)
 );
