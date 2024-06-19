@@ -8,7 +8,7 @@ INSERT INTO ecommerce_table.users(username, passwordhash, email, firstname, last
 
 -- Insert extra customer
 INSERT INTO ecommerce_table.Users (Username, PasswordHash, Email, FirstName, LastName, PhoneNumber, RoleID) VALUES
-    ('newuserExample', 'hashedpassword5', 'newuser@example.com', 'New', 'User', '0031612345674', (SELECT RoleID FROM ecommerce_table.UserRoles WHERE RoleName = 'Customer'));
+    ('newuserExample2', 'hashedpassword2', 'newuser2@example.com', 'New', 'User2', '0031612345674', (SELECT RoleID FROM ecommerce_table.UserRoles WHERE RoleName = 'Customer'));
 
 -- Example Queries
 
@@ -28,3 +28,8 @@ SELECT r.rolename, COUNT(u.userid) AS UserCount
 FROM ecommerce_table.users u
 JOIN ecommerce_table.userroles r ON u.roleid = r.roleid
 GROUP BY r.rolename;
+
+-- update User Role by RoleID
+UPDATE ecommerce_table.Users
+SET RoleID = (SELECT RoleID FROM ecommerce_table.UserRoles WHERE RoleName = 'Vendor')
+WHERE Username = 'newuserExample';

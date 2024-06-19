@@ -1,3 +1,11 @@
+--UserRoles to Users
+
+--Type: One-to-Many
+--Description: Each user role can be assigned to many users, but each user has only one role.
+--Foreign Key: Users.RoleID → UserRoles.RoleID
+
+--------------------------------------------------------------------
+
 -- Role Definitions and Uses
 -- Admin
 -- Definition:
