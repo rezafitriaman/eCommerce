@@ -59,7 +59,7 @@
 -- Kue Cubit (Mini Pancakes)
 -- Dadar Gulung (Rolled Pancake with Coconut Filling)
 
--- Insert top-level categories
+-- Insert top-level categories - parent category
 INSERT INTO ecommerce_table.categories (categoryname, parentcategoryid) VALUES
     ('Nasi (Rice Dishes)', NULL),
     ('Mie (Noodle Dishes)', NULL),
@@ -70,6 +70,7 @@ INSERT INTO ecommerce_table.categories (categoryname, parentcategoryid) VALUES
     ('Minuman (Drinks)', NULL),
     ('Kue (Cakes and Desserts)', NULL);
 
+-- Insert Childs category
 -- Insert subcategories for 'Nasi (Rice Dishes)'
 INSERT INTO ecommerce_table.categories (categoryname, parentcategoryid) VALUES
     ('Nasi Goreng (Fried Rice)', 1),
