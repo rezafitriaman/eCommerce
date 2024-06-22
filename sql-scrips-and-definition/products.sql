@@ -30,3 +30,19 @@ INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Pric
 VALUES (13, 'Mie Ayam Jakarta', 'Jakarta style chicken noodles', 3.99, 'MIE-AYAM-001', 100);
 INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
 VALUES (14, 'Bakmi Spesial', 'Special noodles with chicken and vegetables', 4.49, 'BAKMI-001', 100);
+
+-- Insert products for Sate (Satay)
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (15, 'Sate Ayam Madura', 'Chicken satay with Madura sauce', 2.99, 'SATE-AYAM-001', 100);
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (16, 'Sate Kambing', 'Goat satay with spicy sauce', 3.99, 'SATE-KAMBING-001', 100);
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (17, 'Sate Sapi', 'Beef satay with peanut sauce', 3.49, 'SATE-SAPI-001', 100);
+
+-- Insert products for Lauk (Main Dishes)
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (18, 'Ayam Goreng Kalasan', 'Fried chicken with Kalasan spices', 4.99, 'AYAM-GORENG-001', 100);
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (20, 'Ikan Bakar Jimbaran', 'Grilled fish Jimbaran style', 6.49, 'IKAN-BAKAR-001', 100);
+INSERT INTO ecommerce_table.Products (CategoryID, ProductName, Description, Price, SKU, StockQuantity)
+VALUES (19, 'Rendang Padang', 'Spicy beef stew Padang style', 5.99, 'RENDANG-001', 100);

@@ -85,16 +85,16 @@ INSERT INTO ecommerce_table.Categories (CategoryName, ParentCategoryID) VALUES
 
 -- Insert subcategories for 'Lauk (Main Dishes)'
 INSERT INTO ecommerce_table.Categories (CategoryName, ParentCategoryID) VALUES
-    ('Ayam Goreng (Fried Chicken)', 3),
-    ('Rendang (Spicy Beef Stew)', 3),
-    ('Ikan Bakar (Grilled Fish)', 3);
+    ('Ayam Goreng (Fried Chicken)', 4),
+    ('Rendang (Spicy Beef Stew)', 4),
+    ('Ikan Bakar (Grilled Fish)', 4);
 
 
 -- Insert subcategories for 'Sate (Satay)'
 INSERT INTO ecommerce_table.categories (categoryname, parentcategoryid) VALUES
-    ('Sate Ayam (Chicken Satay)', 4),
-    ('Sate Kambing (Goat Satay)', 4),
-    ('Sate Sapi (Beef Satay)', 4);
+    ('Sate Ayam (Chicken Satay)', 3),
+    ('Sate Kambing (Goat Satay)', 3),
+    ('Sate Sapi (Beef Satay)', 3);
 
 -- Insert subcategories for 'Sayur (Vegetable Dishes)'
 INSERT INTO ecommerce_table.Categories (CategoryName, ParentCategoryID) VALUES
