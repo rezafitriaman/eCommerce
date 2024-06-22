@@ -121,3 +121,8 @@ INSERT INTO ecommerce_table.Categories (CategoryName, ParentCategoryID) VALUES
     ('Dadar Gulung (Rolled Pancake with Coconut Filling)', 8);
 
 
+-- Categories to Products
+--
+-- Type: One-to-Many
+-- Description: Each category can contain multiple products, but each product belongs to only one category.
+-- Foreign Key: Products.CategoryID → Categories.CategoryID
