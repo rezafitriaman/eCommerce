@@ -30,9 +30,9 @@ INSERT INTO ecommerce_table.productcategories (productid, categoryid) VALUES
 
 -- Step 1: Migrate Existing Data
 -- Insert existing CategoryID relationships from Products into ProductCategories
-INSERT INTO ecommerce_table.productcategories (productid, categoryid)
-SELECT ProductID, CategoryID
-FROM ecommerce_table.Products;
+-- INSERT INTO ecommerce_table.productcategories (productid, categoryid)
+-- SELECT ProductID, CategoryID
+-- FROM ecommerce_table.Products;
 
 DELETE FROM ecommerce_table.productcategories
 WHERE productcategoryid = 24;

@@ -47,8 +47,8 @@ VALUES ('Rendang Padang', 'Spicy beef stew Padang style', 5.99, 'RENDANG-001', 1
 
 ----------- Drop CategoryID column on Products because we dont need it
 -- Drop the CategoryID column from the Products table
-ALTER TABLE ecommerce_table.Products
-DROP COLUMN CategoryID;
+-- ALTER TABLE ecommerce_table.Products
+-- DROP COLUMN CategoryID;
 
 -- Select all from productCategories table
 SELECT * FROM ecommerce_table.ProductCategories;
