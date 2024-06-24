@@ -43,22 +43,21 @@ CREATE TABLE ecommerce_table.Categories (
 -- Create Products table
 CREATE TABLE ecommerce_table.Products (
 	ProductID SERIAL PRIMARY KEY,
-	CategoryID INT NOT NULL,
 	ProductName VARCHAR(255) NOT NULL,
 	Description TEXT,
 	Price DECIMAL(10, 2) NOT NULL,
 	SKU VARCHAR(50) NOT NULL UNIQUE,
 	StockQuantity INT NOT NULL,
-	FOREIGN KEY (CategoryID) REFERENCES ecommerce_table.Categories(CategoryID)
 );
 
 -- Create ProductCategories table
 CREATE TABLE ecommerce_table.ProductCategories (
-	ProductCategoryID SERIAL PRIMARY KEY,
-	ProductID INT NOT NULL,
-	CategoryID INT NOT NULL,
-	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
-	FOREIGN KEY (CategoryID) REFERENCES ecommerce_table.Categories(CategoryID)
+   ProductCategoryID SERIAL PRIMARY KEY,
+   ProductID INT NOT NULL,
+   CategoryID INT NOT NULL,
+   FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+   FOREIGN KEY (CategoryID) REFERENCES ecommerce_table.Categories(CategoryID),
+   CONSTRAINT UQ_ProductCategories UNIQUE (ProductID, CategoryID) -- to ensure the combination of the ProductID and CategoryID are unique
 );
 
 -- Create ProductImages table
