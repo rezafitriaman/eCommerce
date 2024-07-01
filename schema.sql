@@ -61,16 +61,29 @@ CREATE TABLE ecommerce_table.ProductCategories (
 );
 
 -- Create ProductImages table
+-- To create the ProductImages table with the unique constraint at the time of table creation, you can use a CREATE TABLE statement along with a CONSTRAINT clause to define the unique constraint. Here’s how you can include the unique constraint directly within the CREATE TABLE statement:
+
+-- Explanation
+-- SERIAL PRIMARY KEY: Automatically generates a unique identifier for each image.
+-- ProductID INT NOT NULL: Stores the ID of the product the image belongs to.
+-- ImageURL VARCHAR(255) NOT NULL: Stores the URL of the image.
+-- IsPrimary BOOLEAN DEFAULT FALSE: Indicates if the image is the primary image for the product.
+-- FOREIGN KEY (ProductID) REFERENCES ecommerce.Products(ProductID): Ensures that the ProductID exists in the Products table.
+-- CONSTRAINT unique_primary_image_per_product UNIQUE (ProductID, IsPrimary) DEFERRABLE INITIALLY DEFERRED: Ensures that each product can have only one primary image. The constraint is defined as DEFERRABLE INITIALLY DEFERRED to allow transaction-level control over the constraint checking.
+
+-- Creating the Table with the Unique Constraint
+-- The DEFERRABLE INITIALLY DEFERRED part allows the constraint to be checked at the end of the transaction rather than immediately, which can be useful in scenarios where you might be making multiple changes within a transaction that would temporarily violate the constraint.
 CREATE TABLE ecommerce_table.ProductImages (
 	ImageID SERIAL PRIMARY KEY,
 	ProductID INT NOT NULL,
 	ImageURL VARCHAR(200) NOT NULL,
 	IsPrimary BOOLEAN NOT NULL DEFAULT FALSE,
-	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+    CONSTRAINT unique_primary_image_per_product UNIQUE (ProductID, IsPrimary) DEFERRABLE INITIALLY DEFERRED
 );
 
 -- Create ProductAttributes table
-Create table ecommerce_table.ProductAttributtes (
+Create table ecommerce_table.ProductAttributes (
 	AttributeID SERIAL PRIMARY KEY,
 	ProductID INT NOT NULL,
 	AttributeName VARCHAR(100) NOT NULL,
@@ -78,12 +91,17 @@ Create table ecommerce_table.ProductAttributtes (
 	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
 );
 
+-- add unique constraint to productAttributes table
+ALTER TABLE ecommerce_table.ProductAttributes
+ADD CONSTRAINT unique_product_attribute UNIQUE (ProductID, AttributeName);
+
 -- Create ProductTags table
 CREATE TABLE ecommerce_table.ProductTags (
 	TagID SERIAL PRIMARY KEY,
 	ProductID INT NOT NULL,
 	TagName VARCHAR(100) NOT NULL,
-	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+    CONSTRAINT unique_product_tag UNIQUE (ProductID, TagName)
 );
 
 -- Create Promotions table
@@ -120,8 +138,10 @@ CREATE TABLE ecommerce_table.Inventory (
 	ProductID INT NOT NULL,
 	WarehouseLocation VARCHAR(100) NOT NULL,
 	Quantity INT NOT NULL,
-	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+    CONSTRAINT unique_product_warehouse UNIQUE (ProductID, WarehouseLocation)
 );
+
 
 CREATE TABLE ecommerce_table.ProductAvailability (
 	AvailabilityID SERIAL PRIMARY KEY,
