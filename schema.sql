@@ -47,7 +47,7 @@ CREATE TABLE ecommerce_table.Products (
 	Description TEXT,
 	Price DECIMAL(10, 2) NOT NULL,
 	SKU VARCHAR(50) NOT NULL UNIQUE,
-	StockQuantity INT NOT NULL,
+	StockQuantity INT NOT NULL
 );
 
 -- Create ProductCategories table
