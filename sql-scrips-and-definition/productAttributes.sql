@@ -68,8 +68,8 @@ INSERT INTO ecommerce_table.productattributes (productid, attributename, attribu
     SET attributevalue = EXCLUDED.attributevalue;
 
 TRUNCATE TABLE ecommerce_table.productattributes;
--- Or
-DELETE FROM ecommerce_table.productattributes;
+-- Or - 'Delete' statement without 'where' clears all data in the table
+-- DELETE FROM ecommerce_table.productattributes;
 
 -- Delete table
 DROP TABLE ecommerce_table.productattributes;

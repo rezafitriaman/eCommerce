@@ -32,8 +32,37 @@ WHERE productid = (select productid from ecommerce_table.products where productn
 
 -- TODO attempt to update a non-existent inventory item with error handling
 
--- Error Handling
+-- Error Handling with transaction
 -- To handle such situations, you can:
 --
 -- Check Existence Before Update: Query the table to check if the item exists before attempting the update.
 --     Use Conditional Logic in Application Code: Add logic in your application to handle cases where the item does not exist.
+
+SELECT 1 FROM ecommerce_table.inventory WHERE productid = (select products.productid from ecommerce_table.products where productname = 'Sate Kambing');
+
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM ecommerce_table.inventory WHERE productid = (select products.productid from ecommerce_table.products where productname = 'Sate Kambing') AND warehouselocation = 'Warehouse A') THEN
+        UPDATE ecommerce_table.inventory
+        SET quantity = quantity - 1
+        WHERE productid = (select productid from ecommerce_table.products where productname = 'Sate Kambing') AND warehouselocation = 'Warehouse A';
+    ELSE
+        RAISE NOTICE 'No such inventory item exists.';
+    END IF;
+END $$;
+
+-- or
+
+DO $$
+    BEGIN
+        IF EXISTS (SELECT 1 FROM ecommerce_table.Inventory WHERE ProductID = 12 AND WarehouseLocation = 'Warehouse A') THEN
+            UPDATE ecommerce_table.Inventory
+            SET Quantity = Quantity - 1
+            WHERE ProductID = 11 AND WarehouseLocation = 'Warehouse B';
+        ELSE
+            RAISE NOTICE 'No such inventory item exists.';
+        END IF;
+    END $$;
+
+-- Verify the updated state of the Inventory table
+SELECT * FROM ecommerce_table.inventory;
