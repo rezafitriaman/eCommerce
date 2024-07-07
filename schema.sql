@@ -175,7 +175,7 @@ CREATE TABLE ecommerce_table.Orders (
 	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
 	FOREIGN KEY (ShippingAddressID) REFERENCES ecommerce_table.Addresses(AddressID),
 	FOREIGN KEY (BillingAddressID) REFERENCES ecommerce_table.Addresses(AddressID),
-    CHECK ( OrderStatus IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned')),
+    CHECK ( OrderStatus IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned'))
 );
 
 -- Adding The 'CHECK' Constraint to an Existing Table
