@@ -147,7 +147,8 @@ CREATE TABLE ecommerce_table.ProductAvailability (
 	AvailabilityID SERIAL PRIMARY KEY,
 	ProductID INT NOT NULL,
 	IsAvailable BOOLEAN NOT NULL,
-	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID)
+	FOREIGN KEY (ProductID) REFERENCES ecommerce_table.Products(ProductID),
+    CONSTRAINT unique_product_availability UNIQUE (ProductID, IsAvailable)
 );
 
 -- Create ProductReviews table
@@ -173,8 +174,22 @@ CREATE TABLE ecommerce_table.Orders (
 	OrderStatus VARCHAR(50) NOT NULL,
 	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
 	FOREIGN KEY (ShippingAddressID) REFERENCES ecommerce_table.Addresses(AddressID),
-	FOREIGN KEY (BillingAddressID) REFERENCES ecommerce_table.Addresses(AddressID)
+	FOREIGN KEY (BillingAddressID) REFERENCES ecommerce_table.Addresses(AddressID),
+    CHECK ( OrderStatus IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned')),
 );
+
+-- Adding The 'CHECK' Constraint to an Existing Table
+-- ALTER TABLE ecommerce_table.Orders
+-- ADD CONSTRAINT chk_order_status CHECK ( OrderStatus IN ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled', 'Returned'));
+
+-- waring u dont need unique constrain for unique_user_shippingAddress_billingAddress_orderStatus - because u prevent the same id order a food more then once
+-- Adding unique constrain for user, ShippingAddress, BillingAddress and OrderStatus
+-- ALTER TABLE ecommerce_table.Orders
+-- ADD CONSTRAINT unique_user_shippingAddress_billingAddress_orderStatus UNIQUE (UserID, ShippingAddressID, BillingAddressID, OrderStatus);
+
+-- Drop a constrain
+-- ALTER TABLE ecommerce_table.Orders
+--     DROP CONSTRAINT unique_user_shippingAddress_billingAddress_orderStatus;
 
 -- Create SupportTickets table
 CREATE TABLE ecommerce_table.SupportTickets (
@@ -185,8 +200,18 @@ CREATE TABLE ecommerce_table.SupportTickets (
 	Status VARCHAR(50) NOT NULL,
 	CreatedDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
-	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID)
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
+    CHECK (Status IN ('Open', 'In Progress', 'Resolved', 'Closed')),
+    CONSTRAINT unique_user_order_subject UNIQUE (UserID, OrderID, Subject)
 );
+
+-- when supportTickets table is already exist u need to add it like so:
+-- ALTER TABLE ecommerce_table.SupportTickets
+-- ADD CONSTRAINT chk_status CHECK ( Status IN ('Open', 'In Progress', 'Resolved', 'Closed'));
+
+-- Adding unique constrain for user, order and subject for SupportTickets
+ALTER TABLE ecommerce_table.SupportTickets
+ADD CONSTRAINT unique_user_order_subject UNIQUE (UserID, OrderID, Subject);
 
 -- Create TicketMessages table
 CREATE TABLE ecommerce_table.TicketMessages (

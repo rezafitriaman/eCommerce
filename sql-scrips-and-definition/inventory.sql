@@ -30,8 +30,6 @@ UPDATE ecommerce_table.inventory
 SET quantity = quantity - 1
 WHERE productid = (select productid from ecommerce_table.products where productname = 'Nas') AND warehouselocation = 'Warehouse A';
 
--- TODO attempt to update a non-existent inventory item with error handling
-
 -- Error Handling with transaction
 -- To handle such situations, you can:
 --
