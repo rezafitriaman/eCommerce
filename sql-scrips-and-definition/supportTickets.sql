@@ -37,20 +37,41 @@
 CREATE OR REPLACE FUNCTION create_support_ticket(
     p_user_id INT,
     p_order_id INT,
+    p_subject VARCHAR(250),
     p_status VARCHAR(50)
 )
     RETURNS VOID AS $$
 BEGIN
     INSERT INTO ecommerce_table.SupportTickets (UserID, OrderID, Subject, Status)
-    VALUES (p_user_id, p_order_id, 'Late Delivery for Order #' || p_order_id, p_status);
+    VALUES (p_user_id, p_order_id, p_subject, p_status);
 EXCEPTION
     WHEN unique_violation THEN
-        RAISE NOTICE 'A support ticket for UserID % and OrderID % already exists.', p_user_id, p_order_id;
+        RAISE NOTICE 'A support ticket for UserID % and OrderID % with a subject "%" already exists.', p_user_id, p_order_id, p_subject;
     WHEN others THEN
         RAISE EXCEPTION 'An error occurred: %', SQLERRM;
-END;
-$$ LANGUAGE plpsql;
+END
+$$ LANGUAGE plpgsql;
 
+-- Explanation:
+-- Dynamic Subject: The function uses the || operator to concatenate the OrderID with the static part of the subject string.
+-- Exception Handling:
+-- unique_violation: This exception catches cases where a duplicate entry is attempted (if you have a unique constraint set up).
+-- others: This catches any other errors that may occur and raises an exception with the error message.
 -- Insert example data into SupportTickets using function
-SELECT create_support_ticket((SELECT userid from ecommerce_table.users where email = 'customer@example.com'), (select orderid from ecommerce_table.orders where userid = (select users.userid from ecommerce_table.users where email = 'customer@example.com')), 'Open');
-SELECT create_support_ticket(6, 7, 'Open');
+SELECT create_support_ticket((SELECT userid from ecommerce_table.users where email = 'customer@example.com'),
+                             8,
+                             'Delivery Issue', 'Open');
+SELECT create_support_ticket(6, 7, 'Product Quality Issue', 'Open');
+SELECT create_support_ticket(2, 8, 'Product Quality Issue', 'Open');
+
+-- Retrieve support tickets related to a specific order
+SELECT
+    *
+FROM
+    ecommerce_table.supporttickets st
+--JOIN
+--    ecommerce_table.users u ON st.userid = u.userid
+JOIN
+    ecommerce_table.orders o ON st.orderid = o.orderid
+WHERE
+    st.orderid = 7;

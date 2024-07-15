@@ -15,6 +15,9 @@ INSERT INTO ecommerce_table.Addresses (userid, street, city, state, postalcode, 
 INSERT INTO ecommerce_table.addresses (userid, street, city, state, postalcode, country) VALUES
     (1, 'Adminstraat 85', 'Groningen', 'Groningen', '9741ET', 'Netherlands');
 
+INSERT INTO ecommerce_table.addresses (userid, street, city, state, postalcode, country)
+VALUES ((SELECT userid FROM ecommerce_table.users WHERE email = 'newuser2@example.com'), 'Asingastraat', 'Groningen', 'Groningen', '9716ET', 'Netherland');
+
 --Querying Data:
 --find all addresses for 'customerExample':
 SELECT u.username

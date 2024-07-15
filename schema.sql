@@ -191,13 +191,22 @@ CREATE TABLE ecommerce_table.Orders (
 -- ALTER TABLE ecommerce_table.Orders
 --     DROP CONSTRAINT unique_user_shippingAddress_billingAddress_orderStatus;
 
+-- Create Enum Type for Subjects in SupportTickets
+-- CREATE TYPE support_ticket_subject AS ENUM (
+--     'Delivery Issue',
+--     'Product Quality Issue',
+--     'Billing Issue',
+--     'Technical Issue',
+--     'Other'
+-- );
+
 -- Create SupportTickets table
 CREATE TABLE ecommerce_table.SupportTickets (
 	TicketID SERIAL PRIMARY KEY,
 	UserID INT NOT NULL,
 	OrderID INT,
-	Subject VARCHAR(255) NOT NULL,
-	Status VARCHAR(50) NOT NULL,
+    Subject VARCHAR(255) NOT NULL CHECK (Subject IN ('Delivery Issue', 'Product Quality Issue', 'Billing Issue', 'Technical Issue', 'Other')),
+	Status VARCHAR(50) NOT NULL DEFAULT 'Open',
 	CreatedDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (UserID) REFERENCES ecommerce_table.Users(UserID),
 	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
@@ -205,13 +214,16 @@ CREATE TABLE ecommerce_table.SupportTickets (
     CONSTRAINT unique_user_order_subject UNIQUE (UserID, OrderID, Subject)
 );
 
+-- drop table ecommerce_table.ticketmessages;
+-- drop table ecommerce_table.SupportTickets;
+
 -- when supportTickets table is already exist u need to add it like so:
 -- ALTER TABLE ecommerce_table.SupportTickets
 -- ADD CONSTRAINT chk_status CHECK ( Status IN ('Open', 'In Progress', 'Resolved', 'Closed'));
 
 -- Adding unique constrain for user, order and subject for SupportTickets
-ALTER TABLE ecommerce_table.SupportTickets
-ADD CONSTRAINT unique_user_order_subject UNIQUE (UserID, OrderID, Subject);
+--ALTER TABLE ecommerce_table.SupportTickets
+--ADD CONSTRAINT unique_user_order_subject UNIQUE (UserID, OrderID, Subject);
 
 -- Create TicketMessages table
 CREATE TABLE ecommerce_table.TicketMessages (
@@ -221,7 +233,7 @@ CREATE TABLE ecommerce_table.TicketMessages (
 	MessageText TEXT NOT NULL,
 	Timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (TicketID) REFERENCES ecommerce_table.SupportTickets(TicketID),
-	FOREIGN KEY (SenderID) REFERENCES ecommerce_table.Users(UserID)
+	FOREIGN KEY (SenderID) REFERENCES ecommerce_table.Users(UserID) -- is a UserID
 );
 
 -- Create OrderDetails table
