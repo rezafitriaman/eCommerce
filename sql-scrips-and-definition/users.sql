@@ -33,3 +33,7 @@ GROUP BY r.rolename;
 UPDATE ecommerce_table.Users
 SET RoleID = (SELECT RoleID FROM ecommerce_table.UserRoles WHERE RoleName = 'Vendor')
 WHERE Username = 'newuserExample';
+
+-- Insert first user
+INSERT INTO  ecommerce_table.users (username, passwordhash, email, firstname, lastname, phonenumber, roleid)
+VALUES ('masterReza', 'hashedPassword', 'rezafitriaman@hotmail.com', 'Reza', 'Fitriaman', '0629333234', (SELECT roleid FROM ecommerce_table.userroles WHERE rolename = 'Customer'));
