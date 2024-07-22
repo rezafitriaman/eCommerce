@@ -35,8 +35,8 @@ WITH CTE AS (SELECT row_number() OVER (
     PARTITION BY productid, categoryid
     ORDER BY productcategoryid
     ) AS row_num,
-                    productcategoryid
-             FROM ecommerce_table.productcategories)
+        productcategoryid
+        FROM ecommerce_table.productcategories)
 DELETE
 FROM ecommerce_table.productcategories
 WHERE productcategoryid IN (SELECT productcategoryid
@@ -48,7 +48,7 @@ WHERE productcategoryid IN (SELECT productcategoryid
 ALTER TABLE ecommerce_table.ProductCategories
     ADD CONSTRAINT UQ_ProductCategories UNIQUE (ProductID, CategoryID);
 
---- test ---
+--- start test ---
 
 SELECT productid, count(*)
 from ecommerce_table.productcategories
@@ -75,7 +75,7 @@ from cte
 where cte.row_num > 1;
 --);
 
---- test ----
+--- end test ----
 
 -- This is an example if u want to do a duplicate check first before inserting an value
 -- Insert product-category relationships without duplicates
@@ -100,6 +100,7 @@ WHERE ProductID = 1 AND CategoryID = 1;
 BEGIN;
 
 -- Check if the new combination exists
+-- This is good for updating an existing entries
 DO $$
     BEGIN
         IF EXISTS (
@@ -120,6 +121,7 @@ DO $$
 COMMIT;
 -- end optional code
 
+-- this is good for inserting non existing entries
 INSERT INTO ecommerce_table.productcategories (productid, categoryid)
 SELECT 1, 2
 WHERE NOT EXISTS (
