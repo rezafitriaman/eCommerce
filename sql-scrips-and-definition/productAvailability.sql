@@ -25,7 +25,7 @@
 
 INSERT INTO ecommerce_table.productavailability (productid, isavailable) VALUES (12, TRUE), (15, TRUE), (5, FALSE);
 
--- delete rows
+-- delete all rows
 TRUNCATE TABLE ecommerce_table.productavailability;
 
 -- delete table

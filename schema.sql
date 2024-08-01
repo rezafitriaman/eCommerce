@@ -264,8 +264,12 @@ CREATE TABLE ecommerce_table.Payments (
 	Amount DECIMAL(10, 2) NOT NULL,
 	PaymentDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PaymentStatus VARCHAR(50) NOT NULL,
-	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID)
+	FOREIGN KEY (OrderID) REFERENCES ecommerce_table.Orders(OrderID),
+    CHECK (PaymentStatus IN ('Pending', 'Completed', 'Failed', 'Refunded'))
 );
+
+-- Delete table
+-- DROP table ecommerce_table.Payments;
 
 -- Create Wishlist table
 CREATE TABLE ecommerce_table.Wishlist (
